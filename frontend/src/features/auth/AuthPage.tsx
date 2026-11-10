@@ -13,14 +13,26 @@ export function AuthPage() {
   const [show, setShow] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
+  const [email, setEmail] = useState('')
   if (user) return <Navigate to="/app" replace />
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault(); setLoading(true); setError('')
-    const values = Object.fromEntries(new FormData(event.currentTarget))
+    const form = event.currentTarget
+    const values = Object.fromEntries(new FormData(form))
     try {
-      const result = await api<{ access_token: string; user: User }>(register ? '/auth/register' : '/auth/login', json('POST', values))
-      setSession(result.access_token, result.user)
+      if (register) {
+        const result = await api<{ message: string; user: User }>('/auth/register', json('POST', values))
+        setEmail(result.user.email)
+        setRegister(false)
+        setShow(false)
+        setSuccess(result.message)
+        form.reset()
+      } else {
+        const result = await api<{ access_token: string; user: User }>('/auth/login', json('POST', values))
+        setSession(result.access_token, result.user)
+      }
     } catch (reason) { setError(reason instanceof Error ? reason.message : 'Could not continue') } finally { setLoading(false) }
   }
 
@@ -32,8 +44,8 @@ export function AuthPage() {
       <p className="relative text-xs text-slate-500">Requirements intelligence, without the black box.</p>
     </section>
     <section className="flex items-center justify-center p-5 sm:p-10"><div className="w-full max-w-md"><div className="mb-10 lg:hidden"><Logo /></div><div className="mb-8"><span className="mb-4 grid h-12 w-12 place-items-center rounded-2xl bg-cyan-50 text-ocean"><ShieldCheck /></span><h2 className="font-display text-3xl font-extrabold text-ink">{register ? 'Create your workspace' : 'Welcome back'}</h2><p className="mt-2 text-slate-500">{register ? 'Start reviewing requirements with traceable AI.' : 'Sign in to continue to your projects.'}</p></div>
-      <form onSubmit={submit} className="space-y-4">{register && <label className="field-label">Full name<input className="field" name="name" minLength={2} required placeholder="Alex Morgan" /></label>}<label className="field-label">Work email<input className="field" name="email" type="email" required placeholder="you@company.com" /></label><label className="field-label">Password<div className="relative"><input className="field pr-12" name="password" type={show ? 'text' : 'password'} minLength={8} required placeholder="Minimum 8 characters" /><button type="button" onClick={() => setShow(!show)} className="absolute right-3 top-3 text-slate-400" aria-label="Toggle password visibility">{show ? <EyeOff size={19} /> : <Eye size={19} />}</button></div></label>{error && <p role="alert" className="rounded-xl bg-red-50 p-3 text-sm font-semibold text-red-700">{error}</p>}<Button loading={loading} className="w-full py-3">{register ? 'Create account' : 'Sign in'}<ArrowRight size={17} /></Button></form>
-      <p className="mt-7 text-center text-sm text-slate-500">{register ? 'Already have an account?' : 'New to ReqLens?'} <button onClick={() => { setRegister(!register); setError('') }} className="font-bold text-ocean hover:underline">{register ? 'Sign in' : 'Create an account'}</button></p>
+      <form onSubmit={submit} className="space-y-4">{register && <label className="field-label">Full name<input className="field" name="name" minLength={2} maxLength={80} autoComplete="name" required placeholder="Alex Morgan" /></label>}<label className="field-label">Work email<input className="field" name="email" type="email" maxLength={254} autoComplete="email" value={email} onChange={event => setEmail(event.target.value)} required placeholder="you@company.com" /></label><label className="field-label">Password<div className="relative"><input className="field pr-12" name="password" type={show ? 'text' : 'password'} minLength={8} maxLength={128} autoComplete={register ? 'new-password' : 'current-password'} required placeholder="Minimum 8 characters" /><button type="button" onClick={() => setShow(!show)} className="absolute right-3 top-3 text-slate-400" aria-label={show ? 'Hide password' : 'Show password'}>{show ? <EyeOff size={19} /> : <Eye size={19} />}</button></div></label>{success && <p role="status" className="rounded-xl bg-emerald-50 p-3 text-sm font-semibold text-emerald-700">{success}</p>}{error && <p role="alert" className="rounded-xl bg-red-50 p-3 text-sm font-semibold text-red-700">{error}</p>}<Button loading={loading} className="w-full py-3">{register ? 'Create account' : 'Sign in'}<ArrowRight size={17} /></Button></form>
+      <p className="mt-7 text-center text-sm text-slate-500">{register ? 'Already have an account?' : 'New to ReqLens?'} <button type="button" onClick={() => { setRegister(!register); setError(''); setSuccess(''); setShow(false) }} className="font-bold text-ocean hover:underline">{register ? 'Sign in' : 'Create an account'}</button></p>
     </div></section>
   </main>
 }

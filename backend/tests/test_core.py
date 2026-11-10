@@ -1,6 +1,7 @@
 from app.audit import audit_chunks
 from app.ingestion import chunk_pages
 from app.rag import compress_for_generation, cosine, expand_queries, parse_metadata_filters
+from app.services import finding_key
 
 
 def chunk(chunk_id: str, text: str, document_id: str = "d1"):
@@ -29,4 +30,10 @@ def test_advanced_retrieval_helpers_are_bounded_and_safe():
     assert parse_metadata_filters("Security Policy version 2") == {"version": "2", "document_type": "Security Policy"}
     assert "$where" not in parse_metadata_filters("version 2 $where")
     assert len(compress_for_generation("session timeout", "Unrelated sentence. Session timeout is 30 minutes.")) <= 700
+
+
+def test_finding_key_deduplicates_the_same_issue_regardless_of_evidence_order():
+    left = {"issue_type": "contradiction", "evidence": [{"chunk_id": "c2"}, {"chunk_id": "c1"}]}
+    right = {"issue_type": "contradiction", "evidence": [{"chunk_id": "c1"}, {"chunk_id": "c2"}]}
+    assert finding_key(left) == finding_key(right)
 

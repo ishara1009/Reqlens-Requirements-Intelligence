@@ -18,6 +18,15 @@ def not_found(label: str = "Resource") -> HTTPException:
     return HTTPException(status_code=404, detail=f"{label} not found")
 
 
+def finding_key(row: dict) -> tuple[str, tuple[str, ...]]:
+    chunk_ids = tuple(sorted(
+        evidence["chunk_id"]
+        for evidence in row.get("evidence", [])
+        if evidence.get("chunk_id")
+    ))
+    return row.get("issue_type", ""), chunk_ids
+
+
 class AuthService:
     def __init__(self, db: AsyncIOMotorDatabase): self.users = UserRepository(db)
 
@@ -28,7 +37,7 @@ class AuthService:
             user = await self.users.create({"name": name, "email": email.lower(), "password_hash": hash_password(password), "created_at": now()})
         except DuplicateKeyError:
             raise HTTPException(status_code=409, detail="An account with this email already exists")
-        return {"access_token": create_access_token(user["id"]), "user": user}
+        return {"message": "Account created successfully. Please sign in to continue.", "user": user}
 
     async def login(self, email: str, password: str):
         user = await self.users.by_email(email)
@@ -108,10 +117,18 @@ class IntelligenceService:
         if not chunks: raise HTTPException(status_code=400, detail="Upload and process at least one document first")
         run_id = uuid4().hex
         rows = audit_chunks(project_id, chunks)
+        existing = {
+            finding_key(row)
+            async for row in self.db.findings.find(
+                {"project_id": project_id},
+                {"issue_type": 1, "evidence.chunk_id": 1},
+            )
+        }
+        rows = [row for row in rows if finding_key(row) not in existing]
         for row in rows: row.update({"run_id": run_id, "created_by": user_id})
         count = await self.findings.insert_many(rows)
         await self.db.audit_runs.insert_one({"run_id": run_id, "project_id": project_id, "created_by": user_id, "status": "completed", "findings_created": count, "created_at": now()})
-        return {"run_id": run_id, "status": "completed", "findings_created": count, "message": "AI candidates are ready for human review." if count else "No candidate issues were detected by the current checks."}
+        return {"run_id": run_id, "status": "completed", "findings_created": count, "message": "New AI candidates are ready for human review." if count else "No new candidate issues were detected."}
 
     async def chat(self, project_id: str, user_id: str, question: str, thread_id: str | None, use_external: bool):
         thread_id = thread_id or uuid4().hex

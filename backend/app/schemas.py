@@ -31,6 +31,11 @@ class AuthResponse(ApiModel):
     user: UserPublic
 
 
+class RegistrationResponse(ApiModel):
+    message: str
+    user: UserPublic
+
+
 class ProjectStatus(str, Enum):
     active = "active"
     archived = "archived"

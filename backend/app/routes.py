@@ -7,7 +7,7 @@ from app.repositories import DocumentRepository, FindingRepository, ProjectRepos
 from app.schemas import (
     AuditResponse, AuthResponse, ChatRequest, ChatResponse, DashboardSummary,
     DocumentPublic, FindingPublic, LoginRequest, ProjectCreate, ProjectPublic,
-    ProjectUpdate, RegisterRequest, ReviewRequest, UserPublic,
+    ProjectUpdate, RegisterRequest, RegistrationResponse, ReviewRequest, UserPublic,
 )
 from app.services import AuthService, DocumentService, IntelligenceService, ProjectService
 
@@ -26,7 +26,7 @@ async def health(db=Depends(get_database), settings: Settings = Depends(get_sett
     return {"status": "healthy", "database": get_database_backend(), "ai_configured": settings.openai_ready}
 
 
-@router.post("/auth/register", response_model=AuthResponse, status_code=201)
+@router.post("/auth/register", response_model=RegistrationResponse, status_code=201)
 async def register(payload: RegisterRequest, db=Depends(get_database)):
     return await AuthService(db).register(payload.name, payload.email, payload.password)
 
