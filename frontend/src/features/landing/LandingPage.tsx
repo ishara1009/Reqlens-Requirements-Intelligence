@@ -13,7 +13,7 @@ export function LandingPage() {
   const { user } = useAuth()
   const workspacePath = user ? '/app' : '/login'
 
-  return <main className="min-h-screen overflow-hidden bg-[#f8faf7] text-ink">
+  return <main className="min-h-screen overflow-x-hidden bg-[#f8faf7] pt-20 text-ink">
     <header className="landing-nav">
       <div className="landing-container flex h-20 items-center justify-between">
         <Link to="/" aria-label="ReqLens AI home"><Logo /></Link>
