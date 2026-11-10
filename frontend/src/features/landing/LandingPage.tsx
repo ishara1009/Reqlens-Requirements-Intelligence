@@ -23,7 +23,6 @@ export function LandingPage() {
           <a href="#security" className="landing-nav-link">Security</a>
         </nav>
         <div className="flex items-center gap-3">
-          {!user && <Link to="/login" className="hidden text-sm font-bold text-slate-600 hover:text-ocean sm:block">Sign in</Link>}
           <Link to={workspacePath} className="landing-button landing-button-dark">{user ? 'Open workspace' : 'Start analyzing'}<ArrowRight size={16} /></Link>
         </div>
       </div>
