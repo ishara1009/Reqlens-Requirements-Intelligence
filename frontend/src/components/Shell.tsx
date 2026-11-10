@@ -10,9 +10,9 @@ export function Shell({ children }: { children: ReactNode }) {
   const location = useLocation()
   const [open, setOpen] = useState(false)
   const nav = <>
-    <Link onClick={() => setOpen(false)} to="/" className={`nav-link ${location.pathname === '/' ? 'nav-active' : ''}`}><ChartNoAxesColumnIncreasing size={19} /> Overview</Link>
+    <Link onClick={() => setOpen(false)} to="/app" className={`nav-link ${location.pathname === '/app' ? 'nav-active' : ''}`}><ChartNoAxesColumnIncreasing size={19} /> Overview</Link>
     <div className="mt-7 px-3 text-[11px] font-extrabold uppercase tracking-[.16em] text-slate-500">Workspace</div>
-    <Link onClick={() => setOpen(false)} to="/" className="nav-link"><BookOpenCheck size={19} /> Projects</Link>
+    <Link onClick={() => setOpen(false)} to="/app" className="nav-link"><BookOpenCheck size={19} /> Projects</Link>
     <span className="nav-link cursor-not-allowed opacity-45"><Settings size={19} /> Settings <span className="ml-auto text-[10px]">SOON</span></span>
   </>
   return <div className="min-h-screen bg-paper">

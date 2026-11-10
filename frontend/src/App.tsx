@@ -4,6 +4,7 @@ import { useAuth } from './lib/auth'
 import { AuthPage } from './features/auth/AuthPage'
 import { DashboardPage } from './features/dashboard/DashboardPage'
 import { ProjectPage } from './features/projects/ProjectPage'
+import { LandingPage } from './features/landing/LandingPage'
 import { Logo } from './components/Logo'
 
 function Protected({ children }: { children: ReactNode }) {
@@ -14,9 +15,11 @@ function Protected({ children }: { children: ReactNode }) {
 
 export default function App() {
   return <Routes>
+    <Route path="/" element={<LandingPage />} />
     <Route path="/login" element={<AuthPage />} />
-    <Route path="/" element={<Protected><DashboardPage /></Protected>} />
-    <Route path="/projects/:id" element={<Protected><ProjectPage /></Protected>} />
+    <Route path="/app" element={<Protected><DashboardPage /></Protected>} />
+    <Route path="/app/projects/:id" element={<Protected><ProjectPage /></Protected>} />
+    <Route path="/projects/:id" element={<Navigate to="/app" replace />} />
     <Route path="*" element={<Navigate to="/" replace />} />
   </Routes>
 }

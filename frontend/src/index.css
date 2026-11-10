@@ -4,6 +4,7 @@
 
 @layer base {
   * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
   body { @apply m-0 bg-paper font-sans text-slate-700 antialiased; }
   button, input, textarea, select { font: inherit; }
   button { @apply focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ocean; }
@@ -22,7 +23,33 @@
   .tab-active { @apply border-ocean text-ocean; }
   .review-button { @apply inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-bold transition; }
   .modal-backdrop { @apply fixed inset-0 z-50 grid place-items-center bg-ink/50 p-4 backdrop-blur-sm; }
+
+  .landing-container { @apply mx-auto w-full max-w-[1240px] px-5 sm:px-8; }
+  .landing-nav { @apply sticky top-0 z-50 border-b border-slate-200/70 bg-[#f8faf7]/90 backdrop-blur-xl; }
+  .landing-nav-link { @apply relative py-2 transition hover:text-ocean; }
+  .landing-nav-link::after { content: ''; @apply absolute bottom-0 left-0 h-0.5 w-0 rounded-full bg-ocean transition-all; }
+  .landing-nav-link:hover::after { @apply w-full; }
+  .landing-button { @apply inline-flex items-center justify-center gap-2 rounded-xl text-sm font-extrabold transition duration-200; }
+  .landing-button-dark { @apply bg-ink px-4 py-2.5 text-white shadow-lg shadow-ink/10 hover:-translate-y-0.5 hover:bg-ocean; }
+  .landing-button-primary { @apply bg-ocean text-white shadow-xl shadow-ocean/20 hover:-translate-y-0.5 hover:bg-[#075f70]; }
+  .landing-button-ghost { @apply border border-slate-200 bg-white text-ink shadow-sm hover:-translate-y-0.5 hover:border-ocean/30 hover:text-ocean; }
+  .landing-pill { @apply mx-auto inline-flex items-center gap-2 rounded-full border border-cyan-200 bg-cyan-50 px-3.5 py-1.5 text-xs font-extrabold uppercase tracking-[.13em] text-ocean; }
+  .landing-emphasis { @apply relative whitespace-nowrap text-ocean; }
+  .landing-emphasis::after { content: ''; @apply absolute -bottom-1 left-0 h-2 w-full rounded-full bg-mint -z-10; transform: rotate(-1.5deg); }
+  .landing-section { @apply relative py-20 sm:py-28; }
+  .landing-eyebrow { @apply text-xs font-extrabold uppercase tracking-[.2em] text-ocean; }
+  .landing-heading { @apply font-display text-4xl font-extrabold tracking-[-.04em] text-ink sm:text-5xl; }
+  .product-frame { @apply relative overflow-hidden rounded-[24px] border border-slate-200 bg-white shadow-[0_35px_100px_rgba(16,42,67,.16)]; }
 }
 
 .auth-grid { background-image: linear-gradient(rgba(255,255,255,.12) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.12) 1px, transparent 1px); background-size: 42px 42px; mask-image: linear-gradient(to bottom, black, transparent 80%); }
+.product-frame::before { content: ''; position: absolute; inset: -2px; border-radius: 26px; padding: 1px; background: linear-gradient(120deg, rgba(11,114,133,.45), transparent 40%, rgba(232,89,12,.25)); pointer-events: none; mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); mask-composite: exclude; }
+.landing-glow { position: absolute; width: 34rem; height: 34rem; border-radius: 9999px; filter: blur(90px); pointer-events: none; opacity: .22; }
+.landing-glow-left { left: -20rem; top: 3rem; background: #74c0fc; }
+.landing-glow-right { right: -20rem; top: 12rem; background: #8ce99a; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
 
