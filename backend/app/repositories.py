@@ -40,6 +40,7 @@ class UserRepository:
 
 class ProjectRepository:
     def __init__(self, db: AsyncIOMotorDatabase):
+        self.db = db
         self.collection = db.projects
         self.documents = db.documents
         self.findings = db.findings
@@ -68,6 +69,23 @@ class ProjectRepository:
         values["updated_at"] = now()
         await self.collection.update_one({"_id": oid(project_id), "owner_id": owner_id}, {"$set": values})
         return await self.get(project_id, owner_id)
+
+    async def delete(self, project_id: str, owner_id: str) -> list[str] | None:
+        project = await self.collection.find_one({"_id": oid(project_id), "owner_id": owner_id})
+        if not project:
+            return None
+        stored_names = [
+            row["stored_name"]
+            async for row in self.documents.find({"project_id": project_id}, {"stored_name": 1})
+            if row.get("stored_name")
+        ]
+        await self.db.chunks.delete_many({"project_id": project_id})
+        await self.documents.delete_many({"project_id": project_id})
+        await self.findings.delete_many({"project_id": project_id})
+        await self.db.audit_runs.delete_many({"project_id": project_id})
+        await self.db.chat_messages.delete_many({"project_id": project_id})
+        await self.collection.delete_one({"_id": oid(project_id), "owner_id": owner_id})
+        return stored_names
 
 
 class DocumentRepository:

@@ -75,6 +75,16 @@ async def update_project(project_id: str, payload: ProjectUpdate, user=Depends(c
     return await ProjectRepository(db).update(project_id, user["id"], payload.model_dump(exclude_none=True))
 
 
+@router.delete("/projects/{project_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_project(
+    project_id: str,
+    user=Depends(current_user),
+    db=Depends(get_database),
+    settings: Settings = Depends(get_settings),
+):
+    await ProjectService(db).delete(project_id, user["id"], settings.upload_dir)
+
+
 @router.get("/projects/{project_id}/documents", response_model=list[DocumentPublic])
 async def list_documents(project=Depends(owned_project), db=Depends(get_database)):
     return await DocumentRepository(db).list(project["id"])

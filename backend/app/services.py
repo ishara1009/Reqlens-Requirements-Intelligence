@@ -58,6 +58,16 @@ class ProjectService:
         timestamp = now()
         return await self.repo.create({**data, "owner_id": user_id, "status": "active", "created_at": timestamp, "updated_at": timestamp})
 
+    async def delete(self, project_id: str, user_id: str, upload_dir: str) -> None:
+        stored_names = await self.repo.delete(project_id, user_id)
+        if stored_names is None:
+            raise not_found("Project")
+        for stored_name in stored_names:
+            try:
+                safe_upload_path(upload_dir, stored_name).unlink(missing_ok=True)
+            except OSError:
+                pass
+
 
 class DocumentService:
     def __init__(self, db: AsyncIOMotorDatabase, settings: Settings):
