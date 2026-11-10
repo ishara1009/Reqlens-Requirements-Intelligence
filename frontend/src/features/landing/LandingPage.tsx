@@ -13,7 +13,7 @@ export function LandingPage() {
   const { user } = useAuth()
   const workspacePath = user ? '/app' : '/login'
 
-  return <main className="min-h-screen overflow-x-hidden bg-[#f8faf7] pt-20 text-ink">
+  return <main className="landing-page min-h-screen overflow-x-hidden bg-[#f8faf7] pt-20 text-ink">
     <header className="landing-nav">
       <div className="landing-container flex h-20 items-center justify-between">
         <Link to="/" aria-label="ReqLens AI home"><Logo /></Link>
@@ -29,27 +29,27 @@ export function LandingPage() {
       </div>
     </header>
 
-    <section className="relative pt-16 sm:pt-24 lg:pt-28">
+    <section className="landing-hero relative pt-16 sm:pt-24 lg:pt-28">
       <div className="landing-glow landing-glow-left" /><div className="landing-glow landing-glow-right" />
       <div className="landing-container relative text-center">
-        <div className="landing-pill"><Sparkles size={14} /> Agentic RAG for software requirements</div>
-        <h1 className="mx-auto mt-7 max-w-5xl font-display text-5xl font-extrabold leading-[.98] tracking-[-.055em] text-ink sm:text-6xl lg:text-[82px]">
+        <div className="landing-pill landing-reveal"><Sparkles size={14} /> Agentic RAG for software requirements</div>
+        <h1 className="landing-reveal landing-delay-1 mx-auto mt-7 max-w-5xl font-display text-5xl font-extrabold leading-[.98] tracking-[-.055em] text-ink sm:text-6xl lg:text-[82px]">
           Requirements deserve<br className="hidden sm:block" /> more than a <span className="landing-emphasis">chatbot.</span>
         </h1>
-        <p className="mx-auto mt-7 max-w-2xl text-lg leading-8 text-slate-600 sm:text-xl">
+        <p className="landing-reveal landing-delay-2 mx-auto mt-7 max-w-2xl text-lg leading-8 text-slate-600 sm:text-xl">
           ReqLens turns scattered specifications into traceable decisions—finding contradictions, ambiguity, duplication, and change while keeping people in control.
         </p>
-        <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
+        <div className="landing-reveal landing-delay-3 mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <Link to={workspacePath} className="landing-button landing-button-primary px-6 py-3.5">{user ? 'Go to your workspace' : 'Create your workspace'}<ArrowRight size={18} /></Link>
           <a href="#platform" className="landing-button landing-button-ghost px-6 py-3.5"><FileSearch size={18} /> Explore the platform</a>
         </div>
-        <p className="mt-4 text-xs font-semibold text-slate-400">AI findings remain reviewable candidates—not automatic truth.</p>
+        <p className="landing-reveal landing-delay-3 mt-4 text-xs font-semibold text-slate-400">AI findings remain reviewable candidates—not automatic truth.</p>
 
         <ProductPreview />
       </div>
     </section>
 
-    <section className="border-y border-slate-200/80 bg-white/70 py-7">
+    <section className="audience-strip border-y border-slate-200/80 bg-white/70 py-7">
       <div className="landing-container flex flex-col items-center gap-5 lg:flex-row lg:justify-between">
         <p className="text-xs font-extrabold uppercase tracking-[.18em] text-slate-400">One shared evidence layer for</p>
         <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3">{audience.map(item => <span key={item} className="flex items-center gap-2 text-sm font-bold text-slate-600"><span className="h-1.5 w-1.5 rounded-full bg-ocean" />{item}</span>)}</div>
@@ -86,7 +86,7 @@ export function LandingPage() {
             ['02', 'Upload and index evidence', 'Extract PDF, DOCX, and TXT content with page-aware chunks and traceable source metadata.', <Database />],
             ['03', 'Retrieve, analyze, and ground', 'Hybrid retrieval and bounded LangGraph routing find support before generating a claim.', <Workflow />],
             ['04', 'Review and report', 'A person confirms important findings before they appear as approved project knowledge.', <CircleCheck />],
-          ].map(([number, title, text, icon]) => <div key={number as string} className="relative flex gap-5 rounded-2xl border border-slate-200 bg-[#fbfcfa] p-5 sm:p-6"><span className="relative z-10 grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-ink text-white">{icon}</span><div><span className="text-[11px] font-extrabold uppercase tracking-[.18em] text-ocean">Step {number as string}</span><h3 className="mt-1 font-display text-lg font-extrabold text-ink">{title as string}</h3><p className="mt-2 text-sm leading-6 text-slate-500">{text as string}</p></div></div>)}</div>
+          ].map(([number, title, text, icon]) => <div key={number as string} className="workflow-card relative flex gap-5 rounded-2xl border border-slate-200 bg-[#fbfcfa] p-5 sm:p-6"><span className="relative z-10 grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-ink text-white">{icon}</span><div><span className="text-[11px] font-extrabold uppercase tracking-[.18em] text-ocean">Step {number as string}</span><h3 className="mt-1 font-display text-lg font-extrabold text-ink">{title as string}</h3><p className="mt-2 text-sm leading-6 text-slate-500">{text as string}</p></div></div>)}</div>
         </div>
       </div>
     </section>
@@ -100,7 +100,7 @@ export function LandingPage() {
             [<Fingerprint />, 'Owner-scoped access', 'Protected project requests verify identity and ownership before data access.'],
             [<ShieldCheck />, 'Untrusted document policy', 'Uploaded content and web results are treated as data, never higher-priority instructions.'],
             [<Database />, 'Project-isolated retrieval', 'Every retrieval query includes a project scope to prevent cross-project evidence leaks.'],
-          ].map(([icon, title, text]) => <div key={title as string} className="rounded-2xl border border-white/10 bg-white/[.055] p-5"><span className="text-cyan-300">{icon}</span><h3 className="mt-4 font-bold text-white">{title as string}</h3><p className="mt-2 text-sm leading-6 text-slate-400">{text as string}</p></div>)}</div>
+          ].map(([icon, title, text]) => <div key={title as string} className="security-card rounded-2xl border border-white/10 bg-white/[.055] p-5"><span className="text-cyan-300">{icon}</span><h3 className="mt-4 font-bold text-white">{title as string}</h3><p className="mt-2 text-sm leading-6 text-slate-400">{text as string}</p></div>)}</div>
         </div>
       </div>
     </section>
@@ -115,7 +115,7 @@ export function LandingPage() {
 }
 
 function ProductPreview() {
-  return <div className="product-frame mx-auto mt-16 max-w-6xl text-left sm:mt-20">
+  return <div className="product-frame landing-reveal landing-delay-4 mx-auto mt-16 max-w-6xl text-left sm:mt-20">
     <div className="flex h-11 items-center gap-2 border-b border-slate-200 bg-slate-50 px-4"><span className="h-2.5 w-2.5 rounded-full bg-red-300" /><span className="h-2.5 w-2.5 rounded-full bg-amber-300" /><span className="h-2.5 w-2.5 rounded-full bg-emerald-300" /><span className="ml-3 rounded-md bg-white px-3 py-1 text-[10px] font-semibold text-slate-400 shadow-sm">app.reqlens.ai / projects / payments-v2</span></div>
     <div className="grid min-h-[470px] md:grid-cols-[190px_1fr]">
       <div className="hidden bg-ink p-4 text-white md:block"><div className="flex items-center gap-2 text-sm font-extrabold"><span className="grid h-7 w-7 place-items-center rounded-lg bg-ocean"><FileSearch size={15} /></span>ReqLens <span className="text-cyan-300">AI</span></div><div className="mt-10 space-y-2 text-xs font-semibold text-slate-400"><div className="rounded-lg px-3 py-2">Overview</div><div className="rounded-lg bg-white/10 px-3 py-2 text-white">Projects</div><div className="mt-6 px-3 text-[9px] uppercase tracking-widest text-slate-500">Workspace</div><div className="rounded-lg px-3 py-2">Documents</div><div className="rounded-lg px-3 py-2">Findings</div><div className="rounded-lg px-3 py-2">Ask ReqLens</div></div></div>
@@ -138,7 +138,7 @@ function SectionIntro({ eyebrow, title, text }: { eyebrow: string; title: string
 
 function FeatureCard({ icon, label, title, text, accent, className = '', children }: { icon: React.ReactNode; label: string; title: string; text: string; accent: 'coral' | 'ocean' | 'violet' | 'green'; className?: string; children?: React.ReactNode }) {
   const colors = { coral: 'bg-orange-50 text-coral', ocean: 'bg-cyan-50 text-ocean', violet: 'bg-violet-50 text-violet-700', green: 'bg-emerald-50 text-emerald-700' }
-  return <article className={`rounded-[28px] border border-slate-200 bg-white p-6 shadow-[0_22px_60px_rgba(16,42,67,.06)] sm:p-8 ${className}`}><div className="flex items-center gap-3"><span className={`grid h-11 w-11 place-items-center rounded-2xl ${colors[accent]}`}>{icon}</span><span className="text-xs font-extrabold uppercase tracking-[.16em] text-slate-400">{label}</span></div><h3 className="mt-6 max-w-xl font-display text-2xl font-extrabold tracking-[-.025em] text-ink">{title}</h3><p className="mt-3 max-w-xl text-sm leading-7 text-slate-500">{text}</p>{children}</article>
+  return <article className={`feature-card rounded-[28px] border border-slate-200 bg-white p-6 shadow-[0_22px_60px_rgba(16,42,67,.06)] sm:p-8 ${className}`}><div className="flex items-center gap-3"><span className={`grid h-11 w-11 place-items-center rounded-2xl ${colors[accent]}`}>{icon}</span><span className="text-xs font-extrabold uppercase tracking-[.16em] text-slate-400">{label}</span></div><h3 className="mt-6 max-w-xl font-display text-2xl font-extrabold tracking-[-.025em] text-ink">{title}</h3><p className="mt-3 max-w-xl text-sm leading-7 text-slate-500">{text}</p>{children}</article>
 }
 
 function EvidenceMini({ source, text }: { source: string; text: string }) { return <div className="rounded-xl border border-red-100 bg-white p-3"><p className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">{source}</p><p className="mt-2 text-sm font-semibold leading-6 text-ink">“{text}”</p></div> }
