@@ -16,7 +16,7 @@ export function LandingPage() {
   return <main className="landing-page min-h-screen overflow-x-hidden bg-[#f8faf7] pt-20 text-ink">
     <header className="landing-nav">
       <div className="landing-container flex h-20 items-center justify-between">
-        <Link to="/" aria-label="ReqLens AI home"><Logo /></Link>
+        <Link to="/" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} aria-label="ReqLens AI home"><Logo /></Link>
         <nav className="hidden items-center gap-8 text-sm font-bold text-slate-600 md:flex" aria-label="Main navigation">
           <a href="#platform" className="landing-nav-link">Platform</a>
           <a href="#workflow" className="landing-nav-link">How it works</a>
