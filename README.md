@@ -40,7 +40,7 @@ The API never sends OpenAI, Tavily, MongoDB, or JWT credentials to React. Retrie
 
 1. Revoke the keys that were pasted into chat and create fresh OpenAI, Tavily, and MongoDB credentials.
 2. Copy `.env.example` to `.env`.
-3. Set a random `JWT_SECRET` with at least 32 characters. Add the new API keys. For the included local MongoDB container, keep `MONGODB_URL=mongodb://mongodb:27017`.
+3. Set a random `JWT_SECRET` with at least 32 characters and add any API keys. Docker Compose automatically points the API container at its MongoDB service.
 4. Start everything:
 
 ```powershell
@@ -55,7 +55,7 @@ After the services start, open:
 
 ## Run without Docker (Windows PowerShell)
 
-Start MongoDB locally, then:
+Start MongoDB locally on port `27017`, then:
 
 ```powershell
 Copy-Item .env.example .env
@@ -90,7 +90,7 @@ The Vite dev server proxies `/api` to port 8000.
 
 Without an OpenAI key, upload, lexical retrieval, audit, review, compare, and reports still work. Chat returns retrieved evidence without synthesizing it.
 
-When `ENVIRONMENT=development` and MongoDB is unavailable, the API can use a temporary in-memory database (`ALLOW_IN_MEMORY_DB=true`). This makes first-time local setup easier, but all data disappears when the backend stops. Production environments never use this fallback.
+For throwaway development only, `ALLOW_IN_MEMORY_DB=true` enables a temporary database when MongoDB is unavailable. All accounts and project data disappear when the backend stops, so the example configuration keeps this fallback disabled. Production environments never use it.
 
 ## Code map
 
