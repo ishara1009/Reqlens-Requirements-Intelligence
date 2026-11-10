@@ -4,6 +4,28 @@ ReqLens AI is an evidence-first requirements intelligence application. Teams upl
 
 This repository deliberately keeps the architecture understandable for an intern: routes handle HTTP, services coordinate use cases, repositories own MongoDB access, and dedicated modules own ingestion, retrieval, audits, and LangGraph orchestration.
 
+## Application screenshots
+
+### Landing page
+
+![ReqLens AI landing page](Photos/1.png)
+
+### Authentication
+
+![ReqLens AI sign-in page](Photos/2.png)
+
+### Project documents
+
+![ReqLens project document workspace](Photos/3.png)
+
+### AI finding candidates
+
+![ReqLens AI findings review](Photos/4.png)
+
+### Grounded project chat
+
+![ReqLens grounded project chat](Photos/5.png)
+
 ## What works
 
 - JWT registration, login, current-user lookup, and protected routes
